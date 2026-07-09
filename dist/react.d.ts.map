@@ -1,1 +1,1 @@
-{"version":3,"file":"react.d.ts","sourceRoot":"","sources":["../src/react.tsx"],"names":[],"mappings":"AAWA,wBAAgB,aAAa,CAAC,KAAK,EAAE;IAAE,UAAU,EAAE,MAAM,CAAC;IAAC,SAAS,EAAE,MAAM,CAAA;CAAE,GAAG,IAAI,CA6BpF"}
+{"version":3,"file":"react.d.ts","sourceRoot":"","sources":["../src/react.tsx"],"names":[],"mappings":"AAWA,wBAAgB,aAAa,CAAC,KAAK,EAAE;IACnC,UAAU,EAAE,MAAM,CAAC;IACnB,SAAS,EAAE,MAAM,CAAC;IAClB;;;;OAIG;IACH,cAAc,CAAC,EAAE,OAAO,CAAC;CAC1B,GAAG,IAAI,CA+BP"}

@@ -6,14 +6,16 @@
 // caller guarantees this only ever runs client-side.
 import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core.js";
 export function createSessionRefreshPlugin(opts) {
-    const { apiBaseUrl, portalUrl } = opts;
+    const { apiBaseUrl, portalUrl, redirectOnDead = true } = opts;
     return () => {
         const readExpiryMs = () => readSessionExpiryMs(document.cookie);
         const refreshUrl = `${apiBaseUrl.replace(/\/$/, "")}/api/auth/refresh`;
-        const onDead = () => {
-            const next = safeNextUrl(location.host, location.pathname + location.search);
-            location.href = `${portalUrl}/login?next=` + encodeURIComponent(next);
-        };
+        const onDead = redirectOnDead
+            ? () => {
+                const next = safeNextUrl(location.host, location.pathname + location.search);
+                location.href = `${portalUrl}/login?next=` + encodeURIComponent(next);
+            }
+            : undefined;
         const k = createSessionKeeper({ refreshUrl, readExpiryMs, onDead });
         k.start();
         const f = () => {

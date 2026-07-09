@@ -1,1 +1,1 @@
-{"version":3,"file":"nuxt.d.ts","sourceRoot":"","sources":["../src/nuxt.ts"],"names":[],"mappings":"AASA,wBAAgB,0BAA0B,CAAC,IAAI,EAAE;IAC/C,UAAU,EAAE,MAAM,CAAC;IACnB,SAAS,EAAE,MAAM,CAAC;CACnB,GAAG,MAAM,IAAI,CAqBb"}
+{"version":3,"file":"nuxt.d.ts","sourceRoot":"","sources":["../src/nuxt.ts"],"names":[],"mappings":"AASA,wBAAgB,0BAA0B,CAAC,IAAI,EAAE;IAC/C,UAAU,EAAE,MAAM,CAAC;IACnB,SAAS,EAAE,MAAM,CAAC;IAClB;;;;;;;OAOG;IACH,cAAc,CAAC,EAAE,OAAO,CAAC;CAC1B,GAAG,MAAM,IAAI,CAuBb"}

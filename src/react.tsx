@@ -9,16 +9,27 @@
 import { useEffect } from "react";
 import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core.js";
 
-export function SessionKeeper(props: { apiBaseUrl: string; portalUrl: string }): null {
-  const { apiBaseUrl, portalUrl } = props;
+export function SessionKeeper(props: {
+  apiBaseUrl: string;
+  portalUrl: string;
+  /**
+   * On a dead refresh (401), redirect to `${portalUrl}/login?next=…`. Default
+   * true. Pass false when the host already has its own login gate and you only
+   * want the keeper to slide/stop (see the Nuxt adapter for the rationale).
+   */
+  redirectOnDead?: boolean;
+}): null {
+  const { apiBaseUrl, portalUrl, redirectOnDead = true } = props;
 
   useEffect(() => {
     const readExpiryMs = () => readSessionExpiryMs(document.cookie);
     const refreshUrl = `${apiBaseUrl.replace(/\/$/, "")}/api/auth/refresh`;
-    const onDead = () => {
-      const next = safeNextUrl(location.host, location.pathname + location.search);
-      location.href = `${portalUrl}/login?next=` + encodeURIComponent(next);
-    };
+    const onDead = redirectOnDead
+      ? () => {
+          const next = safeNextUrl(location.host, location.pathname + location.search);
+          location.href = `${portalUrl}/login?next=` + encodeURIComponent(next);
+        }
+      : undefined;
 
     const k = createSessionKeeper({ refreshUrl, readExpiryMs, onDead });
     k.start();
@@ -35,7 +46,7 @@ export function SessionKeeper(props: { apiBaseUrl: string; portalUrl: string }):
       document.removeEventListener("visibilitychange", f);
       window.removeEventListener("focus", f);
     };
-  }, [apiBaseUrl, portalUrl]);
+  }, [apiBaseUrl, portalUrl, redirectOnDead]);
 
   return null;
 }
