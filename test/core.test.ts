@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { computeRefreshDelayMs, readSessionExpiryMs, safeNextUrl,
-  createSessionKeeper, REFRESH_SKEW_MS, MIN_REFRESH_DELAY_MS } from "../src/core";
+  createSessionKeeper, REFRESH_SKEW_MS, MIN_REFRESH_DELAY_MS,
+  shouldBounceToNext } from "../src/core";
 
 describe("computeRefreshDelayMs", () => {
   it("targets expiresAt - skew", () => {
@@ -34,6 +35,44 @@ describe("safeNextUrl", () => {
   });
   it("falls back off an off-domain host", () => {
     expect(safeNextUrl("evil.com", "/app")).toBe("https://app.revheat.com/app");
+  });
+});
+
+describe("shouldBounceToNext", () => {
+  it("bounces on 200 + valid https subdomain next", () => {
+    expect(shouldBounceToNext(200, "https://hire.revheat.com/app?x=1")).toEqual({
+      bounce: true,
+      url: "https://hire.revheat.com/app?x=1",
+    });
+  });
+  it("bounces on 200 + valid https apex next", () => {
+    expect(shouldBounceToNext(200, "https://revheat.com/foo")).toEqual({
+      bounce: true,
+      url: "https://revheat.com/foo",
+    });
+  });
+  it("does not bounce on non-200 status", () => {
+    expect(shouldBounceToNext(401, "https://hire.revheat.com/app")).toEqual({ bounce: false });
+  });
+  it("does not bounce when next is null", () => {
+    expect(shouldBounceToNext(200, null)).toEqual({ bounce: false });
+  });
+  it("does not bounce on an off-domain host", () => {
+    expect(shouldBounceToNext(200, "https://evil.com/app")).toEqual({ bounce: false });
+  });
+  it("does not bounce on a non-https next", () => {
+    expect(shouldBounceToNext(200, "http://hire.revheat.com/app")).toEqual({ bounce: false });
+  });
+  it("does not bounce on an unparseable next", () => {
+    expect(shouldBounceToNext(200, "not-a-url")).toEqual({ bounce: false });
+  });
+  it("does not bounce on a suffix-spoofed host (evil.revheat.com.attacker.com)", () => {
+    expect(shouldBounceToNext(200, "https://evil.revheat.com.attacker.com/x")).toEqual({
+      bounce: false,
+    });
+  });
+  it("does not bounce on a userinfo-spoofed host (revheat.com@evil.com)", () => {
+    expect(shouldBounceToNext(200, "https://revheat.com@evil.com/x")).toEqual({ bounce: false });
   });
 });
 

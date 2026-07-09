@@ -48,6 +48,32 @@ export function safeNextUrl(host, pathAndQuery) {
     const safeHost = isRevheatHost ? host : FALLBACK_HOST;
     return `https://${safeHost}${pathAndQuery}`;
 }
+/**
+ * Decide whether the portal login page should silently bounce back to `next`
+ * after attempting POST /api/auth/refresh.
+ * - status: the HTTP status of the refresh response (200 = refresh cookie still valid).
+ * - next: the raw `next` query param (a full absolute URL, or null/empty).
+ * Bounce only on 200 AND a valid https `.revheat.com` absolute URL (loop/open-redirect guard).
+ * The returned url is built via safeNextUrl (host + path+query), so an off-domain
+ * host is rejected before we ever return bounce:true.
+ */
+export function shouldBounceToNext(status, next) {
+    if (status !== 200 || !next)
+        return { bounce: false };
+    let u;
+    try {
+        u = new URL(next);
+    }
+    catch {
+        return { bounce: false };
+    }
+    if (u.protocol !== "https:")
+        return { bounce: false };
+    const host = u.hostname;
+    if (host !== "revheat.com" && !host.endsWith(".revheat.com"))
+        return { bounce: false };
+    return { bounce: true, url: safeNextUrl(host, u.pathname + u.search) };
+}
 export function createSessionKeeper(deps) {
     const { refreshUrl, readExpiryMs, onDead } = deps;
     const now = deps.now ?? Date.now;
