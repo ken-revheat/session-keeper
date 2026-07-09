@@ -1,6 +1,6 @@
 {
   "name": "@revheat/session-keeper",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "main": "dist/index.js",
@@ -17,8 +17,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "test": "vitest run",
-    "prepare": "npm run build"
+    "test": "vitest run"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
