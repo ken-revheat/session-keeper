@@ -7,7 +7,7 @@
 // document.visibilityState itself — see Task 2 context).
 
 import { useEffect } from "react";
-import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core";
+import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core.js";
 
 export function SessionKeeper(props: { apiBaseUrl: string; portalUrl: string }): null {
   const { apiBaseUrl, portalUrl } = props;

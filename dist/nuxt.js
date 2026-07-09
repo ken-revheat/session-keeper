@@ -4,7 +4,7 @@
 // this module framework-import-free means the build needs no Vue
 // devDependency. Reads document.cookie / location / window directly; the
 // caller guarantees this only ever runs client-side.
-import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core";
+import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core.js";
 export function createSessionRefreshPlugin(opts) {
     const { apiBaseUrl, portalUrl } = opts;
     return () => {

@@ -5,7 +5,7 @@
 // devDependency. Reads document.cookie / location / window directly; the
 // caller guarantees this only ever runs client-side.
 
-import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core";
+import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core.js";
 
 export function createSessionRefreshPlugin(opts: {
   apiBaseUrl: string;

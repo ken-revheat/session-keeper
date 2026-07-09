@@ -5,7 +5,7 @@
 // becomes visible again (core.onFocus is DOM-free and no longer checks
 // document.visibilityState itself — see Task 2 context).
 import { useEffect } from "react";
-import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core";
+import { createSessionKeeper, readSessionExpiryMs, safeNextUrl } from "./core.js";
 export function SessionKeeper(props) {
     const { apiBaseUrl, portalUrl } = props;
     useEffect(() => {

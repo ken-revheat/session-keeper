@@ -1,3 +1,3 @@
-export * from "./core";
-export { SessionKeeper } from "./react";
-export { createSessionRefreshPlugin } from "./nuxt";
+export * from "./core.js";
+export { SessionKeeper } from "./react.js";
+export { createSessionRefreshPlugin } from "./nuxt.js";
